@@ -187,7 +187,10 @@ function updateTable(earthquakes) {
     const tbody = document.getElementById('earthquakeData');
     tbody.innerHTML = '';
 
-    earthquakes.forEach(quake => {
+    // Sort earthquakes by time (newest first)
+    const sortedEarthquakes = [...earthquakes].sort((a, b) => b.properties.time - a.properties.time);
+
+    sortedEarthquakes.forEach(quake => {
         const row = document.createElement('tr');
         const properties = quake.properties;
         const coordinates = quake.geometry.coordinates;
@@ -291,14 +294,61 @@ function updateMap(earthquakes) {
 function filterEarthquakes() {
     const country = document.getElementById('countryFilter').value;
     const rows = document.getElementById('earthquakeData').getElementsByTagName('tr');
-
+    const tbody = document.getElementById('earthquakeData');
+    
+    let visibleRows = 0;
+    
     for (let row of rows) {
         const location = row.cells[4].textContent; // Update index to match Location column
         if (country === 'all' || location.includes(country)) {
             row.style.display = '';
+            visibleRows++;
         } else {
             row.style.display = 'none';
         }
+    }
+    
+    // If no earthquakes found for the selected country, show a message
+    if (visibleRows === 0 && country !== 'all') {
+        const noDataRow = document.createElement('tr');
+        const noDataCell = document.createElement('td');
+        noDataCell.colSpan = 9; // Span across all columns
+        
+        // Multilingual no data message
+        const noDataMessages = {
+            'en': `No earthquakes found for ${getCountryName(country)}`,
+            'ko': `${getCountryName(country)}에서 발생한 지진이 없습니다`,
+            'th': `ไม่พบแผ่นดินไหวใน${getCountryName(country)}`,
+            'ja': `${getCountryName(country)}で地震は見つかりませんでした`,
+            'zh': `${getCountryName(country)}没有发现地震`,
+            'es': `No se encontraron terremotos en ${getCountryName(country)}`
+        };
+        
+        noDataCell.textContent = noDataMessages[currentLang] || noDataMessages['en'];
+        noDataCell.className = 'no-data-message';
+        
+        noDataRow.appendChild(noDataCell);
+        tbody.appendChild(noDataRow);
+    } else if (visibleRows === 0 && country === 'all') {
+        const noDataRow = document.createElement('tr');
+        const noDataCell = document.createElement('td');
+        noDataCell.colSpan = 9; // Span across all columns
+        
+        // Multilingual no data message for all countries
+        const noDataMessages = {
+            'en': 'No earthquakes found',
+            'ko': '지진 데이터가 없습니다',
+            'th': 'ไม่พบข้อมูลแผ่นดินไหว',
+            'ja': '地震データが見つかりません',
+            'zh': '没有发现地震数据',
+            'es': 'No se encontraron terremotos'
+        };
+        
+        noDataCell.textContent = noDataMessages[currentLang] || noDataMessages['en'];
+        noDataCell.className = 'no-data-message';
+        
+        noDataRow.appendChild(noDataCell);
+        tbody.appendChild(noDataRow);
     }
 }
 
