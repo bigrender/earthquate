@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3362777362830163" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
@@ -29,7 +30,20 @@
                 <button onclick="changeLanguage('es')" class="lang-btn">Español</button>
             </div>
         </header>
-
+        
+        <!-- AdSense 광고 (상단) -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        
         <main>
             <div class="filters">
                 <select id="countryFilter" onchange="filterEarthquakes()">
@@ -74,7 +88,21 @@
                data-ja="最終更新: " data-zh="最后更新: " data-es="Última actualización: ">
                Last Updated: <span id="lastUpdate"></span>
             </p>
+            <p> 2025 Global Earthquake Monitor</p>
         </footer>
+        
+        <!-- AdSense (하단) -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

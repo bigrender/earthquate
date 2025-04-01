@@ -154,6 +154,25 @@ tbody tr:hover {
     font-size: 0.9rem;
 }
 
+/* 광고 컨테이너 스타일 */
+.ad-container {
+    width: 100%;
+    max-width: 970px;
+    margin: 15px auto;
+    text-align: center;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* 모바일 화면에서 광고 크기 조정 */
+@media (max-width: 768px) {
+    .ad-container {
+        padding: 5px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
