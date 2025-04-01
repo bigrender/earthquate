@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Homepage -->
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?lang=es"/>
+  </url>
+  
+  <!-- Thailand Earthquakes - High Priority -->
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=Thailand&amp;lang=es"/>
+  </url>
+  
+  <!-- Other Countries -->
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=Myanmar&amp;lang=es"/>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=Korea&amp;lang=es"/>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=Japan&amp;lang=es"/>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=Indonesia&amp;lang=es"/>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?country=China&amp;lang=en</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=th"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://earthquake.smartlist.co.kr/?country=China&amp;lang=es"/>
+  </url>
+  
+  <!-- Language-specific pages -->
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?lang=ko</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?lang=th</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?lang=ja</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?lang=zh</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://earthquake.smartlist.co.kr/?lang=es</loc>
+    <lastmod>2025-04-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

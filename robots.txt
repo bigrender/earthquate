@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://earthquake.smartlist.co.kr/sitemap.xml

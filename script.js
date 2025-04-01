@@ -77,6 +77,8 @@ function changeLanguage(lang) {
             filterEarthquakes();
         }
     }
+    
+    updateURL();
 }
 
 // Store the last fetched earthquakes for language switching
@@ -350,6 +352,8 @@ function filterEarthquakes() {
         noDataRow.appendChild(noDataCell);
         tbody.appendChild(noDataRow);
     }
+    
+    updateURL();
 }
 
 // Function to update last update time
@@ -381,13 +385,116 @@ function getCountryName(country) {
     return country;
 }
 
+// Function to handle URL parameters
+function handleURLParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Handle language parameter
+    const langParam = urlParams.get('lang');
+    if (langParam && ['en', 'ko', 'th', 'ja', 'zh', 'es'].includes(langParam)) {
+        changeLanguage(langParam);
+    }
+    
+    // Handle country parameter
+    const countryParam = urlParams.get('country');
+    if (countryParam) {
+        const countrySelect = document.getElementById('countryFilter');
+        const options = Array.from(countrySelect.options);
+        
+        // Find the option that matches the country parameter
+        const matchingOption = options.find(option => 
+            option.value.toLowerCase() === countryParam.toLowerCase() ||
+            option.textContent.toLowerCase() === countryParam.toLowerCase()
+        );
+        
+        if (matchingOption) {
+            countrySelect.value = matchingOption.value;
+            // Filter earthquakes after data is loaded
+            setTimeout(() => filterEarthquakes(), 1000);
+        }
+    }
+    
+    // Update page title based on selected country and language
+    updatePageTitle();
+}
+
+// Function to update page title for better SEO
+function updatePageTitle() {
+    const countrySelect = document.getElementById('countryFilter');
+    const selectedCountry = countrySelect.value;
+    
+    if (selectedCountry !== 'all') {
+        const countryName = getCountryName(selectedCountry);
+        
+        // Title templates for different languages
+        const titleTemplates = {
+            'en': `${countryName} Earthquake Monitor | Global Earthquake Tracker`,
+            'ko': `${countryName} 지진 모니터 | 전세계 지진 추적기`,
+            'th': `ระบบติดตามแผ่นดินไหว${countryName} | ระบบติดตามแผ่นดินไหวทั่วโลก`,
+            'ja': `${countryName}地震モニター | 世界地震追跡`,
+            'zh': `${countryName}地震监测 | 全球地震追踪器`,
+            'es': `Monitor de Terremotos de ${countryName} | Rastreador Global de Terremotos`
+        };
+        
+        document.title = titleTemplates[currentLang] || titleTemplates['en'];
+        
+        // Update meta description for better SEO
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            const descTemplates = {
+                'en': `Real-time earthquake monitoring for ${countryName}. Track mainshocks and aftershocks with detailed information in multiple languages.`,
+                'ko': `${countryName}의 실시간 지진 모니터링. 본진과 여진을 상세한 정보와 함께 다국어로 추적하세요.`,
+                'th': `ติดตามแผ่นดินไหวในประเทศ${countryName}แบบเรียลไทม์ ติดตามแผ่นดินไหวหลักและแผ่นดินไหวตามด้วยข้อมูลโดยละเอียดในหลายภาษา`,
+                'ja': `${countryName}のリアルタイム地震モニタリング。本震と余震を複数の言語で詳細情報と共に追跡します。`,
+                'zh': `${countryName}实时地震监测。以多种语言跟踪主震和余震的详细信息。`,
+                'es': `Monitoreo de terremotos en tiempo real para ${countryName}. Rastree terremotos principales y réplicas con información detallada en varios idiomas.`
+            };
+            
+            metaDescription.content = descTemplates[currentLang] || descTemplates['en'];
+        }
+    }
+}
+
+// Function to update URL with current filters for better SEO and sharing
+function updateURL() {
+    const countrySelect = document.getElementById('countryFilter');
+    const selectedCountry = countrySelect.value;
+    
+    // Create URL parameters
+    const urlParams = new URLSearchParams();
+    
+    // Add language parameter
+    urlParams.set('lang', currentLang);
+    
+    // Add country parameter if not 'all'
+    if (selectedCountry !== 'all') {
+        urlParams.set('country', selectedCountry);
+    }
+    
+    // Update URL without reloading the page
+    const newURL = `${window.location.pathname}?${urlParams.toString()}`;
+    window.history.pushState({ path: newURL }, '', newURL);
+    
+    // Update page title
+    updatePageTitle();
+}
+
 // Initial setup
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     fetchEarthquakeData();
+    
+    // Handle URL parameters after data is loaded
+    setTimeout(handleURLParameters, 1000);
+    
+    // Update URL when country filter changes
+    document.getElementById('countryFilter').addEventListener('change', function() {
+        filterEarthquakes();
+    });
+    
     // Fetch new data every 5 minutes
     setInterval(fetchEarthquakeData, 300000);
 });
 
-// Initial language setup
+// Initial language setup - will be overridden by URL parameters if present
 changeLanguage('en');
