@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Earthquake Monitor | 전세계 지진 모니터</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title" data-en="Global Earthquake Monitor"
+                data-ko="전세계 지진 모니터"
+                data-th="ระบบติดตามแผ่นดินไหวทั่วโลก"
+                data-ja="世界地震モニター"
+                data-zh="全球地震监测"
+                data-es="Monitor Global de Terremotos">
+                Global Earthquake Monitor
+            </h1>
+            <div class="language-selector">
+                <button onclick="changeLanguage('en')" class="lang-btn">English</button>
+                <button onclick="changeLanguage('ko')" class="lang-btn">한국어</button>
+                <button onclick="changeLanguage('th')" class="lang-btn">ไทย</button>
+                <button onclick="changeLanguage('ja')" class="lang-btn">日本語</button>
+                <button onclick="changeLanguage('zh')" class="lang-btn">中文</button>
+                <button onclick="changeLanguage('es')" class="lang-btn">Español</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="filters">
+                <select id="countryFilter" onchange="filterEarthquakes()">
+                    <option value="all" data-en="All Countries" data-ko="모든 국가" data-th="ทุกประเทศ" data-ja="すべての国" data-zh="所有国家" data-es="Todos los países">All Countries</option>
+                    <option value="Myanmar" data-en="Myanmar" data-ko="미얀마" data-th="พม่า" data-ja="ミャンマー" data-zh="缅甸" data-es="Birmania">Myanmar</option>
+                    <option value="Thailand" data-en="Thailand" data-ko="태국" data-th="ประเทศไทย" data-ja="タイ" data-zh="泰国" data-es="Tailandia">Thailand</option>
+                    <option value="Korea" data-en="Korea" data-ko="한국" data-th="เกาหลี" data-ja="韓国" data-zh="韩国" data-es="Corea">Korea</option>
+                    <option value="Japan" data-en="Japan" data-ko="일본" data-th="ญี่ปุ่น" data-ja="日本" data-zh="日本" data-es="Japón">Japan</option>
+                    <option value="Indonesia" data-en="Indonesia" data-ko="인도네시아" data-th="อินโดนีเซีย" data-ja="インドネシア" data-zh="印度尼西亚" data-es="Indonesia">Indonesia</option>
+                    <option value="China" data-en="China" data-ko="중국" data-th="จีน" data-ja="中国" data-zh="中国" data-es="China">China</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table id="earthquakeTable">
+                    <thead>
+                        <tr>
+                            <th data-en="Magnitude" data-ko="규모" data-th="ขนาด" data-ja="マグニチュード" data-zh="震级" data-es="Magnitud">Magnitude</th>
+                            <th data-en="Date/Time" data-ko="발생시각" data-th="วันที่/เวลา" data-ja="発生時刻" data-zh="发生时间" data-es="Fecha/Hora">Date/Time</th>
+                            <th data-en="Location" data-ko="위치" data-th="ตำแหน่ง" data-ja="場所" data-zh="位置" data-es="Ubicación">Location</th>
+                            <th data-en="Latitude" data-ko="위도" data-th="ละติจูด" data-ja="緯度" data-zh="纬度" data-es="Latitud">Latitude</th>
+                            <th data-en="Longitude" data-ko="경도" data-th="ลองจิจูด" data-ja="経度" data-zh="经度" data-es="Longitud">Longitude</th>
+                            <th data-en="Depth" data-ko="깊이" data-th="ความลึก" data-ja="深さ" data-zh="深度" data-es="Profundidad">Depth</th>
+                            <th data-en="Region" data-ko="지역" data-th="บริเวณ" data-ja="地域" data-zh="地区" data-es="Región">Region</th>
+                            <th data-en="Intensity" data-ko="진도" data-th="ความรุนแรง" data-ja="震度" data-zh="烈度" data-es="Intensidad">Intensity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="earthquakeData">
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p class="update-time" data-en="Last Updated: " data-ko="마지막 업데이트: " data-th="อัปเดตล่าสุด: " 
+               data-ja="最終更新: " data-zh="最后更新: " data-es="Última actualización: ">
+               Last Updated: <span id="lastUpdate"></span>
+            </p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
