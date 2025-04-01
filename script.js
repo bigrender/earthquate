@@ -68,6 +68,244 @@ function changeLanguage(lang) {
     document.querySelectorAll('[data-' + lang + ']').forEach(element => {
         element.textContent = element.getAttribute('data-' + lang);
     });
+    
+    // Refresh the table to update the language for earthquake types
+    if (document.getElementById('earthquakeData').children.length > 0) {
+        const currentFilter = document.getElementById('countryFilter').value;
+        updateTable(lastEarthquakes);
+        if (currentFilter !== 'all') {
+            filterEarthquakes();
+        }
+    }
+}
+
+// Store the last fetched earthquakes for language switching
+let lastEarthquakes = [];
+
+// Function to fetch earthquake data
+async function fetchEarthquakeData() {
+    try {
+        // USGS API endpoint for the past 30 days
+        const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson');
+        const data = await response.json();
+        
+        // Filter and process the data
+        const targetCountries = ['Myanmar', 'Thailand', 'Korea', 'Japan', 'Indonesia', 'China'];
+        const relevantEarthquakes = data.features.filter(quake => {
+            const place = quake.properties.place;
+            return targetCountries.some(country => place.includes(country));
+        });
+
+        // Identify mainshocks and aftershocks
+        const processedEarthquakes = identifyAftershocks(relevantEarthquakes);
+        
+        // Store for language switching
+        lastEarthquakes = processedEarthquakes;
+
+        updateTable(processedEarthquakes);
+        updateMap(processedEarthquakes);
+        updateLastUpdateTime();
+    } catch (error) {
+        console.error('Error fetching earthquake data:', error);
+    }
+}
+
+// Function to identify mainshocks and aftershocks
+function identifyAftershocks(earthquakes) {
+    // Sort earthquakes by time (oldest first)
+    const sortedQuakes = [...earthquakes].sort((a, b) => a.properties.time - b.properties.time);
+    
+    // Map to store mainshock-aftershock relationships
+    const quakeMap = new Map();
+    
+    // Parameters for aftershock identification
+    const mainshockThreshold = 4.5; // Magnitude threshold for mainshocks
+    const spatialThreshold = 100; // km
+    const temporalThreshold = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+    
+    // Process each earthquake
+    sortedQuakes.forEach(quake => {
+        const mag = quake.properties.mag;
+        const time = quake.properties.time;
+        const coords = quake.geometry.coordinates;
+        
+        // Flag to determine if this is an aftershock
+        let isAftershock = false;
+        let mainshockId = null;
+        
+        // Check if this is an aftershock of any previous mainshock
+        for (const [id, mainshock] of quakeMap.entries()) {
+            if (mainshock.properties.mag >= mainshockThreshold) {
+                const mainshockTime = mainshock.properties.time;
+                const mainshockCoords = mainshock.geometry.coordinates;
+                
+                // Calculate time difference
+                const timeDiff = time - mainshockTime;
+                
+                // Calculate distance
+                const distance = calculateDistance(
+                    coords[1], coords[0], 
+                    mainshockCoords[1], mainshockCoords[0]
+                );
+                
+                // If within spatial and temporal thresholds, and smaller magnitude, it's an aftershock
+                if (timeDiff > 0 && 
+                    timeDiff < temporalThreshold && 
+                    distance < spatialThreshold && 
+                    mag < mainshock.properties.mag) {
+                    isAftershock = true;
+                    mainshockId = id;
+                    break;
+                }
+            }
+        }
+        
+        // Add earthquake to the map
+        quake.properties.isAftershock = isAftershock;
+        quake.properties.mainshockId = mainshockId;
+        quakeMap.set(quake.id, quake);
+    });
+    
+    return Array.from(quakeMap.values());
+}
+
+// Calculate distance between two points using Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// Function to update the table with earthquake data
+function updateTable(earthquakes) {
+    const tbody = document.getElementById('earthquakeData');
+    tbody.innerHTML = '';
+
+    earthquakes.forEach(quake => {
+        const row = document.createElement('tr');
+        const properties = quake.properties;
+        const coordinates = quake.geometry.coordinates;
+        const time = formatDate(properties.time, currentLang);
+        const magnitude = properties.mag.toFixed(1);
+        const depth = coordinates[2].toFixed(1);
+        const intensityLevel = getIntensityLevel(magnitude);
+        const isAftershock = properties.isAftershock;
+
+        // Determine earthquake type text based on current language
+        let typeText = '';
+        let typeIcon = '';
+        if (isAftershock) {
+            typeIcon = '<i class="fas fa-arrow-right"></i>';
+            typeText = {
+                'en': 'A',
+                'ko': '여',
+                'th': 'อ',
+                'ja': '余',
+                'zh': '余',
+                'es': 'R'
+            }[currentLang] || 'A';
+        } else {
+            typeIcon = '<i class="fas fa-star"></i>';
+            typeText = {
+                'en': 'M',
+                'ko': '본',
+                'th': 'ห',
+                'ja': '本',
+                'zh': '主',
+                'es': 'P'
+            }[currentLang] || 'M';
+        }
+
+        row.innerHTML = `
+            <td class="${isAftershock ? 'aftershock' : 'mainshock'}">${typeIcon} ${typeText}</td>
+            <td class="${magnitude >= 5.0 ? 'magnitude-high' : ''}">${magnitude}</td>
+            <td>${time}</td>
+            <td><span class="intensity-level intensity-${intensityLevel}">${intensityLevel}</span></td>
+            <td>${properties.place}</td>
+            <td>${coordinates[1].toFixed(4)}°</td>
+            <td>${coordinates[0].toFixed(4)}°</td>
+            <td>${depth} km</td>
+            <td>${properties.place.split(', ').slice(-1)[0]}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
+
+// Function to update map markers
+function updateMap(earthquakes) {
+    // Clear existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+
+    // Add new markers
+    earthquakes.forEach(quake => {
+        const coordinates = quake.geometry.coordinates;
+        const magnitude = quake.properties.mag;
+        const isAftershock = quake.properties.isAftershock;
+        
+        // Different colors for mainshocks and aftershocks
+        const markerColor = isAftershock ? '#f39c12' : (magnitude >= 5.0 ? '#e74c3c' : '#3498db');
+        
+        const marker = L.circle([coordinates[1], coordinates[0]], {
+            color: markerColor,
+            fillColor: markerColor,
+            fillOpacity: 0.5,
+            radius: magnitude * 10000 // Scale circle size based on magnitude
+        });
+
+        // Determine earthquake type text based on current language
+        let typeText = isAftershock ? 'Aftershock' : 'Mainshock';
+        if (currentLang === 'ko') {
+            typeText = isAftershock ? '여진' : '본진';
+        } else if (currentLang === 'th') {
+            typeText = isAftershock ? 'อาฟเตอร์ช็อก' : 'แผ่นดินไหวหลัก';
+        } else if (currentLang === 'ja') {
+            typeText = isAftershock ? '余震' : '本震';
+        } else if (currentLang === 'zh') {
+            typeText = isAftershock ? '余震' : '主震';
+        } else if (currentLang === 'es') {
+            typeText = isAftershock ? 'Réplica' : 'Sismo principal';
+        }
+
+        marker.bindPopup(`
+            <strong>${quake.properties.place}</strong><br>
+            Magnitude: ${magnitude}<br>
+            Depth: ${coordinates[2]} km<br>
+            Time: ${new Date(quake.properties.time).toLocaleString()}<br>
+            Type: ${typeText}
+        `);
+
+        marker.addTo(map);
+        markers.push(marker);
+    });
+}
+
+// Function to filter earthquakes by country
+function filterEarthquakes() {
+    const country = document.getElementById('countryFilter').value;
+    const rows = document.getElementById('earthquakeData').getElementsByTagName('tr');
+
+    for (let row of rows) {
+        const location = row.cells[4].textContent; // Update index to match Location column
+        if (country === 'all' || location.includes(country)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+
+// Function to update last update time
+function updateLastUpdateTime() {
+    const lastUpdate = document.getElementById('lastUpdate');
+    lastUpdate.textContent = formatDate(new Date(), currentLang);
 }
 
 // Function to format date for different languages
@@ -91,107 +329,6 @@ function getCountryName(country) {
         return translations.countries[country][currentLang];
     }
     return country;
-}
-
-// Function to fetch earthquake data
-async function fetchEarthquakeData() {
-    try {
-        // USGS API endpoint for the past 30 days
-        const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson');
-        const data = await response.json();
-        
-        // Filter and process the data
-        const targetCountries = ['Myanmar', 'Thailand', 'Korea', 'Japan', 'Indonesia', 'China'];
-        const relevantEarthquakes = data.features.filter(quake => {
-            const place = quake.properties.place;
-            return targetCountries.some(country => place.includes(country));
-        });
-
-        updateTable(relevantEarthquakes);
-        updateMap(relevantEarthquakes);
-        updateLastUpdateTime();
-    } catch (error) {
-        console.error('Error fetching earthquake data:', error);
-    }
-}
-
-// Function to update the table with earthquake data
-function updateTable(earthquakes) {
-    const tbody = document.getElementById('earthquakeData');
-    tbody.innerHTML = '';
-
-    earthquakes.forEach(quake => {
-        const row = document.createElement('tr');
-        const properties = quake.properties;
-        const coordinates = quake.geometry.coordinates;
-        const time = formatDate(properties.time, currentLang);
-        const magnitude = properties.mag.toFixed(1);
-        const depth = coordinates[2].toFixed(1);
-        const intensityLevel = getIntensityLevel(magnitude);
-
-        row.innerHTML = `
-            <td class="${magnitude >= 5.0 ? 'magnitude-high' : ''}">${magnitude}</td>
-            <td>${time}</td>
-            <td>${properties.place}</td>
-            <td>${coordinates[1].toFixed(4)}°</td>
-            <td>${coordinates[0].toFixed(4)}°</td>
-            <td>${depth} km</td>
-            <td>${properties.place.split(', ').slice(-1)[0]}</td>
-            <td><span class="intensity-level intensity-${intensityLevel}">${intensityLevel}</span></td>
-        `;
-
-        tbody.appendChild(row);
-    });
-}
-
-// Function to update map markers
-function updateMap(earthquakes) {
-    // Clear existing markers
-    markers.forEach(marker => map.removeLayer(marker));
-    markers = [];
-
-    // Add new markers
-    earthquakes.forEach(quake => {
-        const coordinates = quake.geometry.coordinates;
-        const magnitude = quake.properties.mag;
-        const marker = L.circle([coordinates[1], coordinates[0]], {
-            color: magnitude >= 5.0 ? '#e74c3c' : '#3498db',
-            fillColor: magnitude >= 5.0 ? '#e74c3c' : '#3498db',
-            fillOpacity: 0.5,
-            radius: magnitude * 10000 // Scale circle size based on magnitude
-        });
-
-        marker.bindPopup(`
-            <strong>${quake.properties.place}</strong><br>
-            Magnitude: ${magnitude}<br>
-            Depth: ${coordinates[2]} km<br>
-            Time: ${new Date(quake.properties.time).toLocaleString()}
-        `);
-
-        marker.addTo(map);
-        markers.push(marker);
-    });
-}
-
-// Function to filter earthquakes by country
-function filterEarthquakes() {
-    const country = document.getElementById('countryFilter').value;
-    const rows = document.getElementById('earthquakeData').getElementsByTagName('tr');
-
-    for (let row of rows) {
-        const location = row.cells[2].textContent; // Update index to match Location column
-        if (country === 'all' || location.includes(country)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    }
-}
-
-// Function to update last update time
-function updateLastUpdateTime() {
-    const lastUpdate = document.getElementById('lastUpdate');
-    lastUpdate.textContent = formatDate(new Date(), currentLang);
 }
 
 // Initial setup

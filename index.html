@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 <body>
     <div class="container">
@@ -46,14 +47,15 @@
                 <table id="earthquakeTable">
                     <thead>
                         <tr>
+                            <th data-en="Type" data-ko="유형" data-th="ประเภท" data-ja="タイプ" data-zh="类型" data-es="Tipo">Type</th>
                             <th data-en="Magnitude" data-ko="규모" data-th="ขนาด" data-ja="マグニチュード" data-zh="震级" data-es="Magnitud">Magnitude</th>
                             <th data-en="Date/Time" data-ko="발생시각" data-th="วันที่/เวลา" data-ja="発生時刻" data-zh="发生时间" data-es="Fecha/Hora">Date/Time</th>
+                            <th data-en="Intensity" data-ko="진도" data-th="ความรุนแรง" data-ja="震度" data-zh="烈度" data-es="Intensidad">Intensity</th>
                             <th data-en="Location" data-ko="위치" data-th="ตำแหน่ง" data-ja="場所" data-zh="位置" data-es="Ubicación">Location</th>
                             <th data-en="Latitude" data-ko="위도" data-th="ละติจูด" data-ja="緯度" data-zh="纬度" data-es="Latitud">Latitude</th>
                             <th data-en="Longitude" data-ko="경도" data-th="ลองจิจูด" data-ja="経度" data-zh="经度" data-es="Longitud">Longitude</th>
                             <th data-en="Depth" data-ko="깊이" data-th="ความลึก" data-ja="深さ" data-zh="深度" data-es="Profundidad">Depth</th>
                             <th data-en="Region" data-ko="지역" data-th="บริเวณ" data-ja="地域" data-zh="地区" data-es="Región">Region</th>
-                            <th data-en="Intensity" data-ko="진도" data-th="ความรุนแรง" data-ja="震度" data-zh="烈度" data-es="Intensidad">Intensity</th>
                         </tr>
                     </thead>
                     <tbody id="earthquakeData">
